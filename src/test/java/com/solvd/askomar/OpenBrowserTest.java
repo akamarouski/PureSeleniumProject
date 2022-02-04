@@ -11,6 +11,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.List;
+import java.util.Optional;
+
 public class OpenBrowserTest {
 
     private static final Logger LOGGER = LogManager.getLogger(OpenBrowserTest.class);
@@ -36,9 +39,10 @@ public class OpenBrowserTest {
     }
 
     @Test(dataProvider = "productTitles")
-    public void safariFindSearchField(String name) throws InterruptedException {
-        homePage.searchProductsAsText(name);
-        Assert.assertNotNull(homePage, " products with title ${name} should exists");
+    public void searchProductsTest(String name) {
+        Optional<List<String>> products = homePage.searchProductsAsText(name);
+        Assert.assertFalse(products.isEmpty(), " products with title ${name} should exists");
+        products.get().forEach(LOGGER::info);
     }
 
     @AfterClass
